@@ -1089,6 +1089,6 @@ class ChatGPTTelegramBot:
         ]))
         application.add_handler(CallbackQueryHandler(self.handle_callback_inline_query))
 
-        application.add_error_handler(error_handler)
+        # application.add_error_handler(error_handler)
 
         application.run_polling()

@@ -42,7 +42,8 @@ class ChatGPTTelegramBot:
             BotCommand(command='help', description=localized_text('help_description', bot_language)),
             BotCommand(command='reset', description=localized_text('reset_description', bot_language)),
             BotCommand(command='stats', description=localized_text('stats_description', bot_language)),
-            BotCommand(command='resend', description=localized_text('resend_description', bot_language))
+            BotCommand(command='resend', description=localized_text('resend_description', bot_language)),
+            BotCommand(command='clear_all', description=localized_text('clear_all_description', bot_language))
         ]
         # If imaging is enabled, add the "image" command to the list
         if self.config.get('enable_image_generation', False):
@@ -72,9 +73,17 @@ class ChatGPTTelegramBot:
                 '\n\n' +
                 '\n'.join(commands_description) +
                 '\n\n' +
-                localized_text('help_text', bot_language)[1] +
-                '\n\n' +
-                localized_text('help_text', bot_language)[2]
+                localized_text('help_text', bot_language)[1]
+        )
+        await update.message.reply_text(help_text, disable_web_page_preview=True)
+
+    async def clearAll(self, update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+        """
+        Clear all messages
+        """
+        commands = self.group_commands if is_group_chat(update) else self.commands
+        help_text = (
+                '😡不可以删除跟本喵的点点滴滴！！'
         )
         await update.message.reply_text(help_text, disable_web_page_preview=True)
 
@@ -1063,6 +1072,7 @@ class ChatGPTTelegramBot:
         application.add_handler(CommandHandler('start', self.help))
         application.add_handler(CommandHandler('stats', self.stats))
         application.add_handler(CommandHandler('resend', self.resend))
+        application.add_handler(CommandHandler('clear_all', self.clearAll))
         application.add_handler(CommandHandler(
             'chat', self.prompt, filters=filters.ChatType.GROUP | filters.ChatType.SUPERGROUP)
         )

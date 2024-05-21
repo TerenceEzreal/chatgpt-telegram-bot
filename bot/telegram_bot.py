@@ -83,7 +83,7 @@ class ChatGPTTelegramBot:
         """
         commands = self.group_commands if is_group_chat(update) else self.commands
         help_text = (
-                '😡不可以删除跟本喵的点点滴滴！！'
+                '😡你是不是不喜欢本喵了，不可以删除跟本喵的点点滴滴！！'
         )
         await update.message.reply_text(help_text, disable_web_page_preview=True)
 
@@ -1061,6 +1061,7 @@ class ChatGPTTelegramBot:
             .token(self.config['token']) \
             .proxy_url(self.config['proxy']) \
             .get_updates_proxy_url(self.config['proxy']) \
+            .http_version('1.1') \
             .post_init(self.post_init) \
             .concurrent_updates(True) \
             .build()
